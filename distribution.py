@@ -19,14 +19,14 @@ for dist_row in dist_rows:
         temp = application_worksheet.find(email, in_row=None, in_column=None, case_sensitive=False)
         if (temp):
             app_row = app_rows[temp.row-1]
+            collected = True
+            for item in app_row:
+                if 'Pending' in item:
+                    collected = False
+            if collected:
+                print(dist_row[1])
+                distribution_worksheet.update_cell(row, 8, 'Picked Up')
         else:
-            print(f"Error:{email}")
-        collected = True
-        for item in app_row:
-            if 'Pending' in item:
-                collected = False
-        if collected:
-            print(dist_row[1])
-            distribution_worksheet.update_cell(row, 8, 'Picked Up')
+            print(f"Error {email} not found in application sheet.")
 
 print('Script is done running!')
