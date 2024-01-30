@@ -5,7 +5,7 @@ gc = gspread.oauth()
 distribution_sheet = gc.open_by_key('1nFSEMI7KSdQ7z4vVSrc-tyIBuUE8bdNo-hsOBEy-qB4')
 application_sheet = gc.open_by_key('1RgTqIQNlmTzLSNYf65uGF3iUaFgwCPPG9owc2GSU_TQ') 
 
-distribution_worksheet = distribution_sheet.worksheet("Fall 2023")
+distribution_worksheet = distribution_sheet.worksheet("Spring 2024")
 application_worksheet = application_sheet.worksheet("DATABASE")
 
 dist_rows = distribution_worksheet.get_all_values()
@@ -14,18 +14,23 @@ row = 0
 
 for dist_row in dist_rows:
     row += 1
-    if (dist_row[7] == 'Pending'):
-        email = dist_row[1]
+    if (dist_row[5] == 'Pending'):
+        email = dist_row[0]
         temp = application_worksheet.find(email, in_row=None, in_column=None, case_sensitive=False)
         if (temp):
             app_row = app_rows[temp.row-1]
-            collected = True
+            collected = False
             for item in app_row:
-                if 'Pending' in item:
+                if 'picked up' in item.lower():
+                    collected = True
+                if 'pending' in item.lower():
                     collected = False
+                if 'does not need' in item.lower() or 'no longer needed' in item.lower():
+                    collected = False
+                    print(f"Student {email} does not need an item")
             if collected:
-                print(dist_row[1])
-                distribution_worksheet.update_cell(row, 8, 'Picked Up')
+                print(email)
+                distribution_worksheet.update_cell(row, 6, 'Picked Up') # 1 + row number from line 17
         else:
             print(f"Error {email} not found in application sheet.")
 
