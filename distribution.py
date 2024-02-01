@@ -25,8 +25,10 @@ for dist_row in dist_rows:
                     collected = True
                 if 'pending' in item.lower():
                     collected = False
+                    break
                 if 'does not need' in item.lower() or 'no longer needed' in item.lower():
                     collected = False
+                    break
                     print(f"Student {email} does not need an item")
             if collected:
                 print(email)
