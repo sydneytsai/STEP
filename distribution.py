@@ -28,8 +28,8 @@ for dist_row in dist_rows:
                     break
                 if 'does not need' in item.lower() or 'no longer needed' in item.lower():
                     collected = False
-                    break
                     print(f"Student {email} does not need an item")
+                    break
             if collected:
                 print(email)
                 distribution_worksheet.update_cell(row, 6, 'Picked Up') # 1 + row number from line 17
