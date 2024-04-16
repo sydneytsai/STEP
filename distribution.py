@@ -13,10 +13,10 @@ app_rows = application_worksheet.get_all_values()
 row = 0
 
 for dist_row in dist_rows:
-    row += 1
-    if (dist_row[5] == 'Pending'):
-        email = dist_row[0]
-        temp = application_worksheet.find(email, in_row=None, in_column=None, case_sensitive=False)
+    row += 1 
+    if (dist_row[6] == 'Pending'): # update if distribution sheet is changed
+        email = dist_row[1]
+        temp = application_worksheet.find(email, in_row=None, in_column=None, case_sensitive=False)  # update if distribution sheet is changed
         if (temp):
             app_row = app_rows[temp.row-1]
             collected = False
@@ -26,13 +26,13 @@ for dist_row in dist_rows:
                 if 'pending' in item.lower():
                     collected = False
                     break
-                if 'does not need' in item.lower() or 'no longer needed' in item.lower():
+                if 'does not need' in item.lower() or 'no longer needed' in item.lower() or 'no longer need' in item.lower():
                     collected = False
                     print(f"Student {email} does not need an item")
                     break
             if collected:
                 print(email)
-                distribution_worksheet.update_cell(row, 6, 'Picked Up') # 1 + row number from line 17
+                distribution_worksheet.update_cell(row, 7, 'Picked Up') # 1 + row number from line 17
         else:
             print(f"Error {email} not found in application sheet.")
 
